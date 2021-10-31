@@ -27,11 +27,28 @@ async function run() {
     const database = client.db("emergencyBooking");
     const serviceCollection = database.collection("services");
 
+    //get the api
     app.get("/services", async (req, res) => {
       const cursor = serviceCollection.find({});
       const services = await cursor.toArray();
       res.send(services);
     });
+
+    //creating post api for creating a new services
+    app.post("/services", async (req, res) => {
+      const newService = req.body;
+      const result = await serviceCollection.insertOne(newService);
+      console.log("creating new services", newService);
+      console.log("added result", result);
+      res.send("hitting the post");
+    });
+
+    //delete an item
+    app.delete("/services/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log("delete id", id);
+    });
+
     app.get("/services/:id", async (req, res) => {
       const id = req.params.id;
       console.log(id);
